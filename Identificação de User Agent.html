@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Identificador de User Agent</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background: #f0f0f0;
+    text-align: center;
+  }
+  button {
+    background-color: #4CAF50;
+    color: white;
+    font-size: 18px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: #45a049;
+  }
+  #ua-display {
+    margin-top: 20px;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: left;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  }
+  .part {
+    margin-bottom: 10px;
+  }
+  .part strong {
+    color: #333;
+  }
+  /* Textos invisíveis para leitores de tela */
+  .sr-only {
+    position: absolute !important;
+    width: 1px; 
+    height: 1px; 
+    padding: 0; 
+    margin: -1px; 
+    overflow: hidden; 
+    clip: rect(0,0,0,0); 
+    border: 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- Descrição acessível em português -->
+<div id="desc-pt" class="sr-only" role="region" aria-label="Descrição da página">
+Esta página contém um botão chamado "Identifique meu User Agent :D". Ao clicar nele, o usuário verá o texto do seu user agent completo, além de uma explicação simples sobre o navegador, sistema operacional, engine de renderização e arquitetura do dispositivo.
+</div>
+
+<!-- Descrição acessível em inglês -->
+<div id="desc-en" class="sr-only" role="region" aria-label="Page description">
+This page contains a button called "Identify my User Agent :D". When clicked, the user will see the full user agent string along with a simple explanation about the browser, operating system, rendering engine, and device architecture.
+</div>
+
+<h1 id="title">Identifique meu User Agent :D</h1>
+<button id="btn-identify">Clique aqui!</button>
+
+<div id="ua-display"></div>
+
+<script>
+  // Textos para as línguas
+  const texts = {
+    pt: {
+      title: "Identifique meu User Agent :D",
+      button: "Clique aqui!",
+      uaComplete: "User Agent completo:",
+      browser: "Navegador:",
+      os: "Sistema Operacional:",
+      engine: "Engine de Renderização:",
+      arch: "Arquitetura:",
+      browserDetails: {
+        "Mozilla Firefox": "Um navegador popular focado em privacidade e código aberto, usando engine Gecko.",
+        "Google Chrome": "O navegador mais usado, rápido, baseado no projeto Chromium e engine Blink.",
+        "Microsoft Edge": "Navegador da Microsoft, baseado em Chromium e Blink, com integração ao Windows.",
+        "Safari": "Navegador da Apple, usado em macOS e iOS, baseado em WebKit.",
+        "Opera": "Navegador alternativo baseado em Chromium, com vários recursos extras.",
+        "Desconhecido": "Navegador não identificado ou raro."
+      },
+      osDetails: {
+        "Windows 10": "Sistema operacional da Microsoft, muito usado em PCs.",
+        "Windows 8.1": "Versão anterior do Windows, menos comum atualmente.",
+        "Windows 7": "Windows clássico, ainda usado por algumas pessoas.",
+        "macOS": "Sistema operacional da Apple para computadores Mac.",
+        "Android": "Sistema operacional móvel do Google, usado em muitos smartphones.",
+        "iOS (iPhone)": "Sistema operacional da Apple para iPhones.",
+        "iOS (iPad)": "Sistema operacional da Apple para iPads.",
+        "Linux": "Sistema operacional livre e aberto, usado em servidores e alguns desktops.",
+        "Desconhecido": "Sistema operacional não identificado."
+      },
+      engineDetails: {
+        "Gecko (Mozilla Firefox)": "Engine usada pelo Firefox, focada em padrões web e privacidade.",
+        "AppleWebKit (Safari, Chrome)": "Engine base para Safari e versões antigas do Chrome, baseada em WebKit.",
+        "Trident (Internet Explorer)": "Engine antiga da Microsoft usada no Internet Explorer.",
+        "Blink (Chrome, Edge moderno)": "Engine moderna baseada em WebKit usada no Chrome e Edge atual.",
+        "Desconhecida": "Engine não identificada."
+      },
+      archDetails: {
+        "64-bit": "Arquitetura de 64 bits, mais moderna e capaz de usar mais memória.",
+        "32-bit": "Arquitetura antiga de 32 bits, com limitações em memória.",
+        "Desconhecida": "Arquitetura não identificada."
+      }
+    },
+    en: {
+      title: "Identify my User Agent :D",
+      button: "Click here!",
+      uaComplete: "Complete User Agent:",
+      browser: "Browser:",
+      os: "Operating System:",
+      engine: "Rendering Engine:",
+      arch: "Architecture:",
+      browserDetails: {
+        "Mozilla Firefox": "A popular browser focused on privacy and open source, using the Gecko engine.",
+        "Google Chrome": "The most used browser, fast, based on the Chromium project and Blink engine.",
+        "Microsoft Edge": "Microsoft's browser, based on Chromium and Blink, integrated with Windows.",
+        "Safari": "Apple's browser for macOS and iOS, based on WebKit.",
+        "Opera": "An alternative browser based on Chromium, with several extra features.",
+        "Desconhecido": "Unknown or rare browser."
+      },
+      osDetails: {
+        "Windows 10": "Microsoft's operating system, widely used on PCs.",
+        "Windows 8.1": "Older version of Windows, less common nowadays.",
+        "Windows 7": "Classic Windows, still used by some people.",
+        "macOS": "Apple's operating system for Mac computers.",
+        "Android": "Google's mobile operating system, used on many smartphones.",
+        "iOS (iPhone)": "Apple's operating system for iPhones.",
+        "iOS (iPad)": "Apple's operating system for iPads.",
+        "Linux": "Free and open-source operating system, used on servers and some desktops.",
+        "Desconhecido": "Unknown operating system."
+      },
+      engineDetails: {
+        "Gecko (Mozilla Firefox)": "Engine used by Firefox, focused on web standards and privacy.",
+        "AppleWebKit (Safari, Chrome)": "Base engine for Safari and older Chrome versions, based on WebKit.",
+        "Trident (Internet Explorer)": "Old Microsoft engine used in Internet Explorer.",
+        "Blink (Chrome, Edge moderno)": "Modern engine based on WebKit used in Chrome and current Edge.",
+        "Desconhecida": "Unknown engine."
+      },
+      archDetails: {
+        "64-bit": "64-bit architecture, more modern and capable of using more memory.",
+        "32-bit": "Old 32-bit architecture, with memory limitations.",
+        "Desconhecida": "Unknown architecture."
+      }
+    }
+  };
+
+  // Detecta idioma do navegador e retorna 'pt' ou 'en'
+  function detectLang() {
+    const lang = navigator.language || navigator.userLanguage || 'pt';
+    if (lang.toLowerCase().startsWith('en')) return 'en';
+    return 'pt';
+  }
+
+  function updateLanguageTexts(lang) {
+    document.getElementById('title').textContent = texts[lang].title;
+    document.getElementById('btn-identify').textContent = texts[lang].button;
+
+    // Mostra só a descrição certa e oculta a outra
+    document.getElementById('desc-pt').style.display = (lang === 'pt') ? 'block' : 'none';
+    document.getElementById('desc-en').style.display = (lang === 'en') ? 'block' : 'none';
+  }
+
+  function parseUserAgent(ua, lang) {
+    const t = texts[lang];
+    const explanations = [];
+
+    explanations.push(`<div class="part"><strong>${t.uaComplete}</strong><br><code>${ua}</code></div>`);
+
+    let browser = "Desconhecido";
+    if (ua.includes("Firefox")) browser = "Mozilla Firefox";
+    else if (ua.includes("Chrome") && !ua.includes("Edg")) browser = "Google Chrome";
+    else if (ua.includes("Edg")) browser = "Microsoft Edge";
+    else if (ua.includes("Safari") && !ua.includes("Chrome")) browser = "Safari";
+    else if (ua.includes("Opera") || ua.includes("OPR")) browser = "Opera";
+
+    explanations.push(`<div class="part"><strong>${t.browser}</strong> ${browser}<br><em>${t.browserDetails[browser]}</em></div>`);
+
+    let os = "Desconhecido";
+    if (ua.includes("Windows NT 10.0")) os = "Windows 10";
+    else if (ua.includes("Windows NT 6.3")) os = "Windows 8.1";
+    else if (ua.includes("Windows NT 6.1")) os = "Windows 7";
+    else if (ua.includes("Macintosh")) os = "macOS";
+    else if (ua.includes("Android")) os = "Android";
+    else if (ua.includes("iPhone")) os = "iOS (iPhone)";
+    else if (ua.includes("iPad")) os = "iOS (iPad)";
+    else if (ua.includes("Linux")) os = "Linux";
+
+    explanations.push(`<div class="part"><strong>${t.os}</strong> ${os}<br><em>${t.osDetails[os]}</em></div>`);
+
+    let engine = "Desconhecida";
+    if (ua.includes("Gecko/")) engine = "Gecko (Mozilla Firefox)";
+    if (ua.includes("AppleWebKit")) engine = "AppleWebKit (Safari, Chrome)";
+    if (ua.includes("Trident")) engine = "Trident (Internet Explorer)";
+    if (ua.includes("Blink")) engine = "Blink (Chrome, Edge moderno)";
+
+    explanations.push(`<div class="part"><strong>${t.engine}</strong> ${engine}<br><em>${t.engineDetails[engine]}</em></div>`);
+
+    let arch = "Desconhecida";
+    if (ua.includes("WOW64") || ua.includes("Win64") || ua.includes("x64") || ua.includes("amd64")) arch = "64-bit";
+    else if (ua.includes("x86")) arch = "32-bit";
+
+    explanations.push(`<div class="part"><strong>${t.arch}</strong> ${arch}<br><em>${t.archDetails[arch]}</em></div>`);
+
+    return explanations.join("");
+  }
+
+  // Ao carregar a página
+  const lang = detectLang();
+  updateLanguageTexts(lang);
+
+  const btn = document.getElementById('btn-identify');
+  const display = document.getElementById('ua-display');
+
+  btn.addEventListener('click', () => {
+    const ua = navigator.userAgent;
+    display.innerHTML = parseUserAgent(ua, lang);
+  });
+</script>
+
+</body>
+</html>
